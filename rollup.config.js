@@ -41,6 +41,27 @@ export default {
       exclude: "node_modules/**",
     }),
     resolve(),
-    commonjs(),
+    commonjs({
+      include: ["node_modules/**"],
+      exclude: ["node_modules/process-es6/**"],
+      namedExports: {
+        "node_modules/react/index.js": [
+          "Children",
+          "Component",
+          "PropTypes",
+          "createElement",
+          "createContext",
+          "useState",
+          "useCallback",
+          "useMemo",
+          "useContext",
+          "useRef",
+          "useEffect",
+          "useLayoutEffect",
+        ],
+        "react-tooltip": ["Tooltip", "deafault"],
+        "node_modules/react-dom/index.js": ["render"],
+      },
+    }),
   ],
 };

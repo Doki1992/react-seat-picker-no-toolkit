@@ -249,6 +249,7 @@ export class SeatPicker extends Component {
         isSelected,
         orientation: seat.orientation,
         isReserved: seat.isReserved,
+        showTooltip: seat.showTooltip,
         tooltip,
         isEnabled: size < maxReservableSeats || continuous,
         selectSeat: this.selectSeat.bind(this, rowNumber, seat.number, seat.id),

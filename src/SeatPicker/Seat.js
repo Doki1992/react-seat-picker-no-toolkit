@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import ReactTooltip from "react-tooltip";
+import { Tooltip } from "react-tooltip";
 
 export default class Seat extends Component {
   static defaultProps = {
@@ -18,6 +18,7 @@ export default class Seat extends Component {
       isEnabled,
       isReserved,
       orientation,
+      showToolTip,
     } = this.props;
     const className =
       "seat" +
@@ -27,7 +28,9 @@ export default class Seat extends Component {
       ` seat--${!orientation ? "north" : orientation}`;
     return (
       <div data-tip={tooltip} className={className} onClick={this.handleClick}>
-        {tooltip ? <ReactTooltip {...this.props.tooltipProps} /> : null}
+        {tooltip && showToolTip ? (
+          <Tooltip {...this.props.tooltipProps} />
+        ) : null}
         <span className="seat__number">{this.props.seatNumber}</span>
       </div>
     );
@@ -43,4 +46,5 @@ Seat.propTypes = {
   seatNumber: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   selectSeat: PropTypes.func.isRequired,
   tooltipProps: PropTypes.object,
+  showToolTip: PropTypes.bool,
 };
