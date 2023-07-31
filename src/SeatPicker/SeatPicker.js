@@ -23,6 +23,7 @@ export class SeatPicker extends Component {
     const { selectedSeats, size } = this.getAlreadySelectedSeats();
     this.state = {
       tooltipOverrides: {},
+      name: "",
       selectedSeats: selectedSeats,
       size: size,
       rowLength: Math.max.apply(
@@ -150,6 +151,14 @@ export class SeatPicker extends Component {
     }
   };
 
+  acceptChanges = (row, number, id, tooltip, name) => {
+    const { tooltipOverrides } = this.state;
+    this.setState({
+      tooltipOverrides: this.addTooltip(tooltipOverrides, row, number, tooltip),
+      name: { [id]: name },
+    });
+  };
+
   acceptDeselection = (row, number, tooltip) => {
     const { size, tooltipOverrides } = this.state;
     this.setState({
@@ -194,7 +203,7 @@ export class SeatPicker extends Component {
 
   render() {
     return (
-      <div className="seat-content">
+      <div className="seat-content" key={this.state.name}>
         <div className={this.props.loading ? "loader" : null} />
         <div className="seat-picker">{this.renderRows()}</div>
       </div>
@@ -250,10 +259,17 @@ export class SeatPicker extends Component {
         orientation: seat.orientation,
         isReserved: seat.isReserved,
         showTooltip: seat.showTooltip,
+        isWheelChair: seat.isWheelChair,
         tooltip,
         isEnabled: size < maxReservableSeats || continuous,
         selectSeat: this.selectSeat.bind(this, rowNumber, seat.number, seat.id),
+        onRightClick: this.props.onRightClick.bind(
+          seat,
+          seat,
+          this.acceptChanges
+        ),
         seatNumber: seat.number,
+        seatName: seat.name,
         tooltipProps: this.props.tooltipProps,
       };
       return <Seat key={index} {...props} />;
@@ -287,4 +303,6 @@ SeatPicker.propTypes = {
   ).isRequired,
   tooltipProps: PropTypes.object,
   loading: PropTypes.bool,
+  onDoubleClick: PropTypes.bool,
+  onRightClick: PropTypes.func,
 };
